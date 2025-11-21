@@ -40,4 +40,4 @@ Our project proposes a **weighted, preference-based course lottery system**. In 
     - Non-major
 
 ### Synthetic Dataset
-The project uses synthetic data(Student Data) for simulation and testing purposes.
+The project uses synthetic data(Student Data).
