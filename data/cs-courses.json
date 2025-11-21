@@ -1,0 +1,682 @@
+[
+  {
+    "courseSectionId": "CSCI004  PZ-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "250",
+    "currentEnrollment": "138",
+    "status": "O",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI005  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "33",
+    "currentEnrollment": "18",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI005  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "33",
+    "currentEnrollment": "16",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI005  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "33",
+    "currentEnrollment": "15",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI005  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "33",
+    "currentEnrollment": "17",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI005  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "33",
+    "currentEnrollment": "18",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI005  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "33",
+    "currentEnrollment": "17",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI035  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "42",
+    "currentEnrollment": "34",
+    "status": "C",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI036  CM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "8",
+    "status": "O",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI036  CM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "18",
+    "currentEnrollment": "12",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI036  PZ-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "28",
+    "currentEnrollment": "22",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI040  CM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "5",
+    "status": "R",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI040  CM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "6",
+    "status": "R",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI046  CM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "30",
+    "currentEnrollment": "19",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI046L CM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "30",
+    "currentEnrollment": "17",
+    "status": "O",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI051A PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "30",
+    "currentEnrollment": "19",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI051A PO-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "30",
+    "currentEnrollment": "15",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI051ALPO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "16",
+    "currentEnrollment": "10",
+    "status": "C",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI051ALPO-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "16",
+    "currentEnrollment": "7",
+    "status": "C",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI051ALPO-03 SP2025",
+    "courseSectionNumber": "03",
+    "capacity": "16",
+    "currentEnrollment": "7",
+    "status": "C",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI051ALPO-04 SP2025",
+    "courseSectionNumber": "04",
+    "capacity": "16",
+    "currentEnrollment": "8",
+    "status": "C",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI054  PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "30",
+    "currentEnrollment": "20",
+    "status": "O",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI060  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "35",
+    "currentEnrollment": "13",
+    "status": "R",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI060  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "35",
+    "currentEnrollment": "8",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI062  PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "24",
+    "currentEnrollment": "12",
+    "status": "O",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI062 LPO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "15",
+    "currentEnrollment": "9",
+    "status": "C",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI062 LPO-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "15",
+    "currentEnrollment": "1",
+    "status": "O",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI070  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "24",
+    "currentEnrollment": "10",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI070  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "24",
+    "currentEnrollment": "8",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI070  HM-03 SP2025",
+    "courseSectionNumber": "03",
+    "capacity": "24",
+    "currentEnrollment": "3",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI081  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "24",
+    "currentEnrollment": "19",
+    "status": "C",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI081  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "24",
+    "currentEnrollment": "17",
+    "status": "C",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI101  PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "30",
+    "currentEnrollment": "21",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI105  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "24",
+    "currentEnrollment": "16",
+    "status": "R",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI105  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "24",
+    "currentEnrollment": "12",
+    "status": "R",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI105  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "24",
+    "currentEnrollment": "13",
+    "status": "R",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI105  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "24",
+    "currentEnrollment": "10",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI105  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "24",
+    "currentEnrollment": "12",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI105  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "24",
+    "currentEnrollment": "10",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI105  PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "30",
+    "currentEnrollment": "18",
+    "status": "O",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI105 LPO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "30",
+    "currentEnrollment": "17",
+    "status": "O",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI123  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "24",
+    "currentEnrollment": "7",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI123  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "24",
+    "currentEnrollment": "11",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI131  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "6",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI133  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "9",
+    "status": "R",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI133  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "18",
+    "currentEnrollment": "9",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI140  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "24",
+    "currentEnrollment": "10",
+    "status": "R",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI140  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "21",
+    "currentEnrollment": "17",
+    "status": "C",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI140  HM-03 SP2025",
+    "courseSectionNumber": "03",
+    "capacity": "24",
+    "currentEnrollment": "15",
+    "status": "C",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI140  PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "30",
+    "currentEnrollment": "23",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI143  CM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "35",
+    "currentEnrollment": "20",
+    "status": "R",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI143  CM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "35",
+    "currentEnrollment": "17",
+    "status": "R",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI144  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "8",
+    "currentEnrollment": "2",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI148  CM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "1",
+    "status": "O",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI151  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "9",
+    "status": "R",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI152  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "10",
+    "status": "R",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI152  PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "28",
+    "currentEnrollment": "14",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI153  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "13",
+    "status": "C",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI158  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "7",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI158  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "18",
+    "currentEnrollment": "8",
+    "status": "R",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI158  PZ-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "60",
+    "currentEnrollment": "43",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI181AFHM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "2",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI181AFHM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "20",
+    "currentEnrollment": "3",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI181APHM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "4",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI181AQHM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "12",
+    "currentEnrollment": "6",
+    "status": "C",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI181ARHM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "16",
+    "currentEnrollment": "6",
+    "status": "R",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI181DVPO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "12",
+    "currentEnrollment": "7",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI181RTPO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "4",
+    "status": "O",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI181RTPO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "18",
+    "currentEnrollment": "5",
+    "status": "O",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI181V PZ-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "35",
+    "currentEnrollment": "20",
+    "status": "O",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI181W PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "20",
+    "currentEnrollment": "11",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI184  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "150",
+    "currentEnrollment": "0",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI184  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "150",
+    "currentEnrollment": "0",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI186  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "35",
+    "currentEnrollment": "0",
+    "status": "O",
+    "creditHours": "3.0"
+  },
+  {
+    "courseSectionId": "CSCI188  PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "100",
+    "currentEnrollment": "22",
+    "status": "O",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI189  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "100",
+    "currentEnrollment": "24",
+    "status": "O",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI190  PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "100",
+    "currentEnrollment": "40",
+    "status": "O",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI191  PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "100",
+    "currentEnrollment": "0",
+    "status": "O",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI192  PO-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "20",
+    "currentEnrollment": "0",
+    "status": "O",
+    "creditHours": "0.5"
+  },
+  {
+    "courseSectionId": "CSCI192  PO-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "20",
+    "currentEnrollment": "0",
+    "status": "O",
+    "creditHours": "0.5"
+  },
+  {
+    "courseSectionId": "CSCI192  PO-03 SP2025",
+    "courseSectionNumber": "03",
+    "capacity": "20",
+    "currentEnrollment": "0",
+    "status": "O",
+    "creditHours": "0.5"
+  },
+  {
+    "courseSectionId": "CSCI195  HM-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "297",
+    "currentEnrollment": "78",
+    "status": "O",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI195  HM-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "1",
+    "currentEnrollment": "2",
+    "status": "C",
+    "creditHours": "0.0"
+  },
+  {
+    "courseSectionId": "CSCI198  SC-01 SP2025",
+    "courseSectionNumber": "01",
+    "capacity": "1",
+    "currentEnrollment": "0",
+    "status": "C",
+    "creditHours": "1.0"
+  },
+  {
+    "courseSectionId": "CSCI198  SC-02 SP2025",
+    "courseSectionNumber": "02",
+    "capacity": "1",
+    "currentEnrollment": "0",
+    "status": "R",
+    "creditHours": "1.0"
+  }
+]
