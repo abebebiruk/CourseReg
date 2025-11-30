@@ -16,6 +16,7 @@ public class RegistrationSystem
     
     /**
      * Constructor
+     * Initializes all HashMaps and Lists
      */
     public RegistrationSystem()
     {
