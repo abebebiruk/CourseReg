@@ -9,7 +9,20 @@ public class PrerequisiteChecker
      */
     public static boolean checkPrerequisites(Student student, Course course)
     {
-        return false;
+        Set<String> prerequisites = course.getPrerequisites();
+        if (prerequisites == null || prerequisites.isEmpty())
+        {
+            return true;
+        }
+        
+        for (String prereq : prerequisites)
+        {
+            if (!student.hasCompletedCourse(prereq))
+            {
+                return false;
+            }
+        }
+        return true;
     }
     
     /**
@@ -19,7 +32,22 @@ public class PrerequisiteChecker
      */
     public static Set<String> getMissingPrerequisites(Student student, Course course)
     {
-        return null;
+        Set<String> missing = new HashSet<>();
+        Set<String> prerequisites = course.getPrerequisites();
+        
+        if (prerequisites == null || prerequisites.isEmpty())
+        {
+            return missing;
+        }
+        
+        for (String prereq : prerequisites)
+        {
+            if (!student.hasCompletedCourse(prereq))
+            {
+                missing.add(prereq);
+            }
+        }
+        return missing;
     }
     
     /**
@@ -29,6 +57,14 @@ public class PrerequisiteChecker
      */
     public static boolean hasCompletedAllPrerequisites(Set<String> completedCourses, Set<String> requiredPrerequisites)
     {
-        return false;
+        if (requiredPrerequisites == null || requiredPrerequisites.isEmpty())
+        {
+            return true;
+        }
+        if (completedCourses == null)
+        {
+            return false;
+        }
+        return completedCourses.containsAll(requiredPrerequisites);
     }
 }

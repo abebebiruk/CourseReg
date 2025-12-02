@@ -14,7 +14,11 @@ public class Student
      */
     public Student(String studentId, String name, int gradYear, String majorStatus)
     {
-        
+        this.studentId = studentId;
+        this.name = name;
+        this.gradYear = gradYear;
+        this.majorStatus = majorStatus;
+        this.pastClasses = new HashSet<>();
     }
     
     /**
@@ -22,7 +26,7 @@ public class Student
      */
     public boolean hasCompletedCourse(String courseId)
     {
-        return false;
+        return pastClasses.contains(courseId);
     }
     
     /**
@@ -30,6 +34,10 @@ public class Student
      */
     public void addPastClass(String courseId)
     {
+        if (courseId != null && !courseId.isEmpty())
+        {
+            pastClasses.add(courseId);
+        }
     }
     
     // Getters

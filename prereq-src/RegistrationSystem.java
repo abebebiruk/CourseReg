@@ -2,6 +2,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class RegistrationSystem
 {
@@ -20,6 +23,10 @@ public class RegistrationSystem
      */
     public RegistrationSystem()
     {
+        this.students = new HashMap<>();
+        this.courses = new HashMap<>();
+        this.coursesByCode = new HashMap<>();
+        this.lottery = new LinkedList<>();
     }
     
     /**
@@ -27,6 +34,10 @@ public class RegistrationSystem
      */
     public void addStudent(Student student)
     {
+        if (student != null && student.getStudentId() != null)
+        {
+            students.put(student.getStudentId(), student);
+        }
     }
     
     /**
@@ -34,6 +45,20 @@ public class RegistrationSystem
      */
     public void addCourse(Course course)
     {
+        if (course != null && course.getCourseSectionId() != null)
+        {
+            courses.put(course.getCourseSectionId(), course);
+            
+            String courseCode = course.getCourseCode();
+            if (courseCode != null)
+            {
+                if (!coursesByCode.containsKey(courseCode))
+                {
+                    coursesByCode.put(courseCode, new HashSet<>());
+                }
+                coursesByCode.get(courseCode).add(course.getCourseSectionId());
+            }
+        }
     }
     
     /**
@@ -42,7 +67,35 @@ public class RegistrationSystem
      */
     public PrerequisiteValidationResult validateRegistration(String studentId, String courseId)
     {
-        return null;
+        Student student = getStudent(studentId);
+        Course course = getCourse(courseId);
+        
+        if (student == null)
+        {
+            return new PrerequisiteValidationResult(false, new HashSet<>(), "Student not found");
+        }
+        
+        if (course == null)
+        {
+            return new PrerequisiteValidationResult(false, new HashSet<>(), "Course not found");
+        }
+        
+        if (!course.hasAvailableSeats())
+        {
+            return new PrerequisiteValidationResult(false, new HashSet<>(), "Course is full");
+        }
+        
+        Set<String> missingPrereqs = PrerequisiteChecker.getMissingPrerequisites(student, course);
+        
+        if (missingPrereqs.isEmpty())
+        {
+            return new PrerequisiteValidationResult(true, missingPrereqs, "Eligible for registration");
+        }
+        else
+        {
+            String message = "Missing prerequisites: " + String.join(", ", missingPrereqs);
+            return new PrerequisiteValidationResult(false, missingPrereqs, message);
+        }
     }
     
     /**
@@ -50,7 +103,7 @@ public class RegistrationSystem
      */
     public Student getStudent(String studentId)
     {
-        return null;
+        return students.get(studentId);
     }
     
     /**
@@ -58,20 +111,95 @@ public class RegistrationSystem
      */
     public Course getCourse(String courseId)
     {
-        return null;
+        return courses.get(courseId);
     }
     
     /**
      * Load student data from file - Builds HashMap during load
+     * CSV format: student_id,name,past_classes,requested_classes,grad_year,major_status
+     * past_classes format: [CS140,CS51,CS62] (bracketed list)
      */
     public void loadStudentData(String filepath)
     {
+        try (BufferedReader br = new BufferedReader(new FileReader(filepath)))
+        {
+            String line = br.readLine();
+            
+            while ((line = br.readLine()) != null)
+            {
+                int firstComma = line.indexOf(',');
+                int secondComma = line.indexOf(',', firstComma + 1);
+                int firstBracket = line.indexOf('[');
+                int firstCloseBracket = line.indexOf(']');
+                int secondBracket = line.indexOf('[', firstCloseBracket + 1);
+                int secondCloseBracket = line.indexOf(']', secondBracket + 1);
+                
+                if (firstComma == -1 || secondComma == -1)
+                {
+                    continue;
+                }
+                
+                String studentId = line.substring(0, firstComma).trim();
+                String name = line.substring(firstComma + 1, secondComma).trim();
+                
+                String pastClassesStr = "";
+                String requestedClassesStr = "";
+                
+                if (firstBracket != -1 && firstCloseBracket != -1)
+                {
+                    pastClassesStr = line.substring(firstBracket, firstCloseBracket + 1).trim();
+                }
+                
+                if (secondBracket != -1 && secondCloseBracket != -1)
+                {
+                    requestedClassesStr = line.substring(secondBracket, secondCloseBracket + 1).trim();
+                }
+                
+                String remaining = line.substring(secondCloseBracket + 2);
+                String[] lastParts = remaining.split(",");
+                
+                if (lastParts.length < 2)
+                {
+                    continue;
+                }
+                
+                int gradYear = Integer.parseInt(lastParts[0].trim());
+                String majorStatus = lastParts[1].trim();
+                
+                Student student = new Student(studentId, name, gradYear, majorStatus);
+                
+                if (!pastClassesStr.equals("") && !pastClassesStr.equals("[]"))
+                {
+                    String cleaned = pastClassesStr.replace("[", "").replace("]", "");
+                    String[] courses = cleaned.split(",");
+                    for (String course : courses)
+                    {
+                        student.addPastClass(course.trim());
+                    }
+                }
+                
+                addStudent(student);
+            }
+        }
+        catch (IOException e)
+        {
+            System.err.println("Error loading student data: " + e.getMessage());
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error parsing student data: " + e.getMessage());
+        }
     }
     
     /**
      * Load course data from file - Builds HashMap during load
+     * Note: This is a placeholder for CSV format. For JSON, use a JSON library.
+     * CSV format expected: courseSectionId,courseCode,capacity,currentEnrollment
      */
     public void loadCourseData(String filepath)
     {
+        // This method would need a JSON parser library for the actual JSON file
+        // For now, it's a placeholder that shows the structure
+        System.out.println("Course data loading requires JSON parsing library");
     }
 }

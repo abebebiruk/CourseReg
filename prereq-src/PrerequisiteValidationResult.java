@@ -11,6 +11,9 @@ public class PrerequisiteValidationResult
      */
     public PrerequisiteValidationResult(boolean isEligible, Set<String> missingPrerequisites, String message)
     {
+        this.isEligible = isEligible;
+        this.missingPrerequisites = missingPrerequisites;
+        this.message = message;
     }
     
     // Getters

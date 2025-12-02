@@ -14,6 +14,11 @@ public class Course
      */
     public Course(String courseSectionId, String courseCode, int capacity)
     {
+        this.courseSectionId = courseSectionId;
+        this.courseCode = courseCode;
+        this.capacity = capacity;
+        this.currentEnrollment = 0;
+        this.prerequisites = new HashSet<>();
     }
     
     /**
@@ -21,6 +26,10 @@ public class Course
      */
     public void addPrerequisite(String prereqId)
     {
+        if (prereqId != null && !prereqId.isEmpty())
+        {
+            prerequisites.add(prereqId);
+        }
     }
     
     /**
@@ -28,6 +37,11 @@ public class Course
      */
     public boolean enrollStudent()
     {
+        if (hasAvailableSeats())
+        {
+            currentEnrollment++;
+            return true;
+        }
         return false;
     }
     
@@ -36,7 +50,7 @@ public class Course
      */
     public boolean hasAvailableSeats()
     {
-        return false;
+        return currentEnrollment < capacity;
     }
     
     // Getters
