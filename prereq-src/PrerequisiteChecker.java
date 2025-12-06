@@ -7,7 +7,7 @@ public class PrerequisiteChecker
      * Check if student meets all prerequisites for a course
      * Time Complexity: O(p) where p = number of prerequisites
      */
-    public static boolean checkPrerequisites(Student student, Course course)
+    public static boolean checkPrerequisites(students student, Course course)
     {
         Set<String> prerequisites = course.getPrerequisites();
         if (prerequisites == null || prerequisites.isEmpty())
@@ -30,7 +30,7 @@ public class PrerequisiteChecker
      * Time Complexity: O(p) where p = number of prerequisites
      * Returns Set instead of List for efficiency
      */
-    public static Set<String> getMissingPrerequisites(Student student, Course course)
+    public static Set<String> getMissingPrerequisites(students student, Course course)
     {
         Set<String> missing = new HashSet<>();
         Set<String> prerequisites = course.getPrerequisites();
