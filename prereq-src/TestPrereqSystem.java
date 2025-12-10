@@ -53,7 +53,7 @@ public class TestPrereqSystem
     {
         System.out.println("Testing Student Class");
         
-        students student = new students("S0001", "John Doe", 2025, "CS major");
+        Student student = new Student("S0001", "John Doe", 2025, "CS major");
         
         System.out.println("Student ID: " + student.getStudentId());
         System.out.println("Name: " + student.getName());
@@ -78,12 +78,12 @@ public class TestPrereqSystem
     {
         System.out.println("Testing PrerequisiteChecker");
         
-        students student1 = new students("S0001", "Alice", 2025, "CS major");
+        Student student1 = new Student("S0001", "Alice", 2025, "CS major");
         student1.addPastClass("CS51");
         student1.addPastClass("CS54");
         student1.addPastClass("CS62");
         
-        students student2 = new students("S0002", "Bob", 2026, "CS minor");
+        Student student2 = new Student("S0002", "Bob", 2026, "CS minor");
         student2.addPastClass("CS51");
         
         Course cs105 = new Course("CSCI105 PO-01 SP2025", "CS105", 30);
@@ -155,12 +155,12 @@ public class TestPrereqSystem
         
         RegistrationSystem system = new RegistrationSystem();
         
-        students student1 = new students("S0001", "Alice Brown", 2025, "CS major");
+        Student student1 = new Student("S0001", "Alice Brown", 2025, "CS major");
         student1.addPastClass("CS51");
         student1.addPastClass("CS54");
         student1.addPastClass("CS62");
         
-        students student2 = new students("S0002", "Charlie Davis", 2026, "CS minor");
+        Student student2 = new Student("S0002", "Charlie Davis", 2026, "CS minor");
         student2.addPastClass("CS51");
         
         Course cs105 = new Course("CSCI105 PO-01 SP2025", "CS105", 2);
@@ -174,7 +174,7 @@ public class TestPrereqSystem
         
         System.out.println("Added 2 students and 1 course to system");
         
-        students retrieved = system.getStudent("S0001");
+        Student retrieved = system.getStudent("S0001");
         System.out.println("Retrieved student: " + retrieved.getName());
         
         Course retrievedCourse = system.getCourse("CSCI105 PO-01 SP2025");
@@ -214,7 +214,7 @@ public class TestPrereqSystem
         String studentFile = "/Users/japhetacquahosei/AAA. COURSE REG/CourseReg/data/student.csv";
         system.loadStudentData(studentFile);
         
-        students s0000 = system.getStudent("S0000");
+        Student s0000 = system.getStudent("S0000");
         if (s0000 != null)
         {
             System.out.println("Loaded student: " + s0000.getName());
@@ -230,7 +230,7 @@ public class TestPrereqSystem
             System.out.println("Failed to load student S0000");
         }
         
-        students s0005 = system.getStudent("S0005");
+        Student s0005 = system.getStudent("S0005");
         if (s0005 != null)
         {
             System.out.println("\nLoaded student: " + s0005.getName());

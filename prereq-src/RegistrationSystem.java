@@ -9,13 +9,13 @@ import java.io.IOException;
 public class RegistrationSystem
 {
     // Stores all students - O(1) lookup by studentId instead of ArrayList with O(n) search
-    private HashMap<String, students> students;
+    private HashMap<String, Student> students;
     // Stores all courses - O(1) lookup by courseId
     private HashMap<String, Course> courses;
     // O(1) lookup to find all sections of a course (e.g., all "CSCI004" sections)
     private HashMap<String, Set<String>> coursesByCode;
     // Lottery pool (temporarily used during course assignment)
-    private LinkedList<students> lottery;
+    private LinkedList<Student> lottery;
     
     /**
      * Constructor
@@ -32,7 +32,7 @@ public class RegistrationSystem
     /**
      * Add a student to the system
      */
-    public void addStudent(students student)
+    public void addStudent(Student student)
     {
         if (student != null && student.getStudentId() != null)
         {
@@ -67,7 +67,7 @@ public class RegistrationSystem
      */
     public PrerequisiteValidationResult validateRegistration(String studentId, String courseId)
     {
-        students student = getStudent(studentId);
+        Student student = getStudent(studentId);
         Course course = getCourse(courseId);
         
         if (student == null)
@@ -101,7 +101,7 @@ public class RegistrationSystem
     /**
      * Get a student by ID - O(1) lookup
      */
-    public students getStudent(String studentId)
+    public Student getStudent(String studentId)
     {
         return students.get(studentId);
     }
@@ -166,7 +166,7 @@ public class RegistrationSystem
                 int gradYear = Integer.parseInt(lastParts[0].trim());
                 String majorStatus = lastParts[1].trim();
                 
-                students student = new students(studentId, name, gradYear, majorStatus);
+                Student student = new Student(studentId, name, gradYear, majorStatus);
                 
                 if (!pastClassesStr.equals("") && !pastClassesStr.equals("[]"))
                 {
