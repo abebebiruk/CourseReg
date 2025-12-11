@@ -3,19 +3,32 @@ import java.util.Set;
 
 public class PrerequisiteChecker
 {
+    // Static instance of the prerequisite graph (DAG)
+    private static PrerequisiteGraph prerequisiteGraph = new PrerequisiteGraph();
+    
     /**
-     * Check if student meets all prerequisites for a course
-     * Time Complexity: O(p) where p = number of prerequisites
+     * Get the prerequisite graph instance
+     */
+    public static PrerequisiteGraph getPrerequisiteGraph()
+    {
+        return prerequisiteGraph;
+    }
+    
+    /**
+     * Check if student meets all prerequisites for a course using DAG
+     * Time Complexity: O(p) where p = number of prerequisites (including transitive)
      */
     public static boolean checkPrerequisites(Student student, Course course)
     {
-        Set<String> prerequisites = course.getPrerequisites();
-        if (prerequisites == null || prerequisites.isEmpty())
+        String courseCode = course.getCourseCode();
+        Set<String> allPrerequisites = prerequisiteGraph.getAllPrerequisites(courseCode);
+        
+        if (allPrerequisites.isEmpty())
         {
             return true;
         }
         
-        for (String prereq : prerequisites)
+        for (String prereq : allPrerequisites)
         {
             if (!student.hasCompletedCourse(prereq))
             {
@@ -26,21 +39,23 @@ public class PrerequisiteChecker
     }
     
     /**
-     * Get the set of missing prerequisites for a student
+     * Get the set of missing prerequisites for a student using DAG
+     * Returns all missing prerequisites (direct and indirect)
      * Time Complexity: O(p) where p = number of prerequisites
      * Returns Set instead of List for efficiency
      */
     public static Set<String> getMissingPrerequisites(Student student, Course course)
     {
         Set<String> missing = new HashSet<>();
-        Set<String> prerequisites = course.getPrerequisites();
+        String courseCode = course.getCourseCode();
+        Set<String> allPrerequisites = prerequisiteGraph.getAllPrerequisites(courseCode);
         
-        if (prerequisites == null || prerequisites.isEmpty())
+        if (allPrerequisites.isEmpty())
         {
             return missing;
         }
         
-        for (String prereq : prerequisites)
+        for (String prereq : allPrerequisites)
         {
             if (!student.hasCompletedCourse(prereq))
             {
@@ -48,6 +63,15 @@ public class PrerequisiteChecker
             }
         }
         return missing;
+    }
+    
+    /**
+     * Get direct prerequisites for a course (immediate prerequisites only)
+     */
+    public static Set<String> getDirectPrerequisites(Course course)
+    {
+        String courseCode = course.getCourseCode();
+        return prerequisiteGraph.getDirectPrerequisites(courseCode);
     }
     
     /**

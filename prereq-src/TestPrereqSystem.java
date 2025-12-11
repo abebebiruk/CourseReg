@@ -4,6 +4,7 @@ public class TestPrereqSystem
     {
         System.out.println("Course Registration Prerequisite System Tests\n");
         
+        testPrerequisiteGraph();
         testCourseClass();
         testStudentClass();
         testPrerequisiteChecker();
@@ -15,22 +16,64 @@ public class TestPrereqSystem
     }
     
     /**
+     * Test PrerequisiteGraph (DAG) functionality
+     */
+    public static void testPrerequisiteGraph()
+    {
+        System.out.println("Testing PrerequisiteGraph (DAG)");
+        
+        PrerequisiteGraph graph = PrerequisiteChecker.getPrerequisiteGraph();
+        
+        // Test cycle detection (should be false for valid DAG)
+        boolean hasCycle = graph.hasCycle();
+        System.out.println("Graph has cycle: " + hasCycle);
+        if (hasCycle)
+        {
+            System.out.println("ERROR: Prerequisite graph contains a cycle!");
+        }
+        else
+        {
+            System.out.println("Graph is a valid DAG (no cycles)");
+        }
+        
+        // Test direct prerequisites
+        System.out.println("\nDirect prerequisites:");
+        System.out.println("CS62 requires: " + graph.getDirectPrerequisites("CS62"));
+        System.out.println("CS105 requires: " + graph.getDirectPrerequisites("CS105"));
+        System.out.println("CS122 requires: " + graph.getDirectPrerequisites("CS122"));
+        System.out.println("CS132 requires: " + graph.getDirectPrerequisites("CS132"));
+        
+        // Test transitive prerequisites (all prerequisites)
+        System.out.println("\nAll prerequisites (including transitive):");
+        System.out.println("CS62 all prereqs: " + graph.getAllPrerequisites("CS62"));
+        System.out.println("CS105 all prereqs: " + graph.getAllPrerequisites("CS105"));
+        System.out.println("CS122 all prereqs: " + graph.getAllPrerequisites("CS122"));
+        System.out.println("CS132 all prereqs: " + graph.getAllPrerequisites("CS132")); //Should include CS105, CS101, CS54, CS62, CS51 transitively
+        
+        // Test courses with no prerequisites
+        System.out.println("\nCourses with no prerequisites:");
+        System.out.println("CS35 prereqs: " + graph.getDirectPrerequisites("CS35"));
+        System.out.println("CS51 prereqs: " + graph.getDirectPrerequisites("CS51"));
+        
+        System.out.println("PrerequisiteGraph tests passed\n");
+    }
+    
+    /**
      * Test Course class functionality
      */
     public static void testCourseClass()
     {
         System.out.println("Testing Course Class");
         
-        Course cs51 = new Course("CSCI051A PO-01 SP2025", "CS51", 30);
         Course cs62 = new Course("CSCI062 PO-01 SP2025", "CS62", 24);
         
-        cs62.addPrerequisite("CS51");
-        cs62.addPrerequisite("CS54");
-        
+        // Get prerequisites from DAG
+        PrerequisiteGraph graph = PrerequisiteChecker.getPrerequisiteGraph();
         System.out.println("Created course: " + cs62.getCourseSectionId());
         System.out.println("Course code: " + cs62.getCourseCode());
         System.out.println("Capacity: " + cs62.getCapacity());
-        System.out.println("Prerequisites: " + cs62.getPrerequisites());
+        System.out.println("Prerequisites from DAG: " + graph.getDirectPrerequisites("CS62"));
+        System.out.println("All prerequisites from DAG: " + graph.getAllPrerequisites("CS62"));
         System.out.println("Has available seats: " + cs62.hasAvailableSeats());
         
         for (int i = 0; i < 24; i++)
@@ -87,13 +130,13 @@ public class TestPrereqSystem
         student2.addPastClass("CS51");
         
         Course cs105 = new Course("CSCI105 PO-01 SP2025", "CS105", 30);
-        cs105.addPrerequisite("CS51");
-        cs105.addPrerequisite("CS54");
-        cs105.addPrerequisite("CS62");
         
+        // Get prerequisites from DAG
+        PrerequisiteGraph graph = PrerequisiteChecker.getPrerequisiteGraph();
         System.out.println("Course: " + cs105.getCourseCode());
-        System.out.println("Prerequisites: " + cs105.getPrerequisites());
-        
+        System.out.println("Direct prerequisites from DAG: " + graph.getDirectPrerequisites("CS105"));
+        System.out.println("All prerequisites from DAG: " + graph.getAllPrerequisites("CS105"));
+
         boolean student1Eligible = PrerequisiteChecker.checkPrerequisites(student1, cs105);
         boolean student2Eligible = PrerequisiteChecker.checkPrerequisites(student2, cs105);
         
@@ -164,10 +207,7 @@ public class TestPrereqSystem
         student2.addPastClass("CS51");
         
         Course cs105 = new Course("CSCI105 PO-01 SP2025", "CS105", 2);
-        cs105.addPrerequisite("CS51");
-        cs105.addPrerequisite("CS54");
-        cs105.addPrerequisite("CS62");
-        
+
         system.addStudent(student1);
         system.addStudent(student2);
         system.addCourse(cs105);
@@ -211,7 +251,7 @@ public class TestPrereqSystem
         
         RegistrationSystem system = new RegistrationSystem();
         
-        String studentFile = "/Users/japhetacquahosei/AAA. COURSE REG/CourseReg/data/student.csv";
+        String studentFile = "data/student.csv";
         system.loadStudentData(studentFile);
         
         Student s0000 = system.getStudent("S0000");
@@ -224,6 +264,7 @@ public class TestPrereqSystem
             System.out.println("Past classes: " + s0000.getPastClasses());
             System.out.println("Has completed CS51: " + s0000.hasCompletedCourse("CS51"));
             System.out.println("Has completed CS62: " + s0000.hasCompletedCourse("CS62"));
+            
         }
         else
         {
@@ -239,10 +280,8 @@ public class TestPrereqSystem
         }
         
         Course cs122 = new Course("CSCI122 PO-01 SP2025", "CS122", 25);
-        cs122.addPrerequisite("CS62");
-        cs122.addPrerequisite("CS105");
-        
         system.addCourse(cs122);
+        
         
         if (s0000 != null)
         {
@@ -251,6 +290,7 @@ public class TestPrereqSystem
             System.out.println("\nValidation for " + s0000.getName() + " in CS122:");
             System.out.println("Eligible: " + result.isEligible());
             System.out.println("Message: " + result.getMessage());
+            System.out.println("Missing prerequisites: " + result.getMissingPrerequisites());
         }
         
         System.out.println("CSV data loading tests passed\n");
