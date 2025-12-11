@@ -41,3 +41,14 @@ Our project proposes a **weighted, preference-based course lottery system**. In 
 
 ### Synthetic Dataset
 The project uses synthetic data(Student Data).
+
+
+## Instructions to Run Interactive Interface
+
+### To Compile:
+javac -cp prereq-src RegistrationInterface.java prereq-src/*.java
+
+### To Run:
+java -cp ".:prereq-src" RegistrationInterface
+if it doesn't work try:
+javac -cp prereq-src RegistrationInterface.java prereq-src\*.java
