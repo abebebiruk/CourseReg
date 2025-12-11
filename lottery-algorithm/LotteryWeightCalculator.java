@@ -1,4 +1,3 @@
-
 public class LotteryWeightCalculator {
 
     /**
@@ -27,21 +26,19 @@ public class LotteryWeightCalculator {
         if (s == null || req == null || course == null) {
             throw new IllegalArgumentException("Student, request, and course cannot be null.");
         }
-        // Course availability checks
-        if (course.status == classes.Status.CLOSED ||
-            course.currentEnrollment >= course.capacity) {
-            return 0; // Cannot enroll → weight = 0
-        }
+
         int weight = 10; // Base weight
+
         // Preference rank bonus
         int rank = req.preferenceRank;
-        if (rank < 1 || rank > 4) rank = 4;  // fallback (should never happen)
+        if (rank < 1 || rank > 4) rank = 4;
         switch (rank) {
             case 1: weight += 4; break;
             case 2: weight += 3; break;
             case 3: weight += 2; break;
             case 4: weight += 1; break;
         }
+
         // Major status bonus
         students.MajorStatus majorStatus =
                 (s.majorStatus == null) ? students.MajorStatus.NON_MAJOR : s.majorStatus;
@@ -50,6 +47,7 @@ public class LotteryWeightCalculator {
             case CS_MINOR: weight += 2; break;
             case NON_MAJOR: break;
         }
+
         // Student academic year bonus
         StudentYear year = getStudentYear(s.gradYear, currentYear);
         switch (year) {
@@ -58,16 +56,7 @@ public class LotteryWeightCalculator {
             case SOPHOMORE: weight += 2; break;
             case FRESHMAN: weight += 1; break;
         }
-        // Seat availability bonus 
-        int seatsLeft = course.capacity - course.currentEnrollment;
-        if (seatsLeft >= 10)      weight += 2;
-        else if (seatsLeft >= 5) weight += 1;
 
-        // Restricted course penalty 
-        if (course.status == classes.Status.RESTRICTED &&
-            majorStatus != students.MajorStatus.CS_MAJOR) {
-            weight -= 2;
-        }
         return Math.max(weight, 1); // Weight cannot drop below 1
     }
 
