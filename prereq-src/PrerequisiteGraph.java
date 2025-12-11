@@ -1,8 +1,6 @@
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * PrerequisiteGraph - DAG (Directed Acyclic Graph) for managing course prerequisites
@@ -239,59 +237,6 @@ public class PrerequisiteGraph
         
         recursionStack.remove(course);
         return false;
-    }
-    
-    /**
-     * Get topological sort of courses (courses that can be taken in order)
-     * @return List of course codes in topological order
-     */
-    public List<String> topologicalSort()
-    {
-        List<String> result = new ArrayList<>();
-        Set<String> visited = new HashSet<>();
-        Set<String> tempMark = new HashSet<>();
-        
-        for (String course : graph.keySet())
-        {
-            if (!visited.contains(course))
-            {
-                topologicalSortDFS(course, visited, tempMark, result);
-            }
-        }
-        
-        return result;
-    }
-    
-    /**
-     * DFS helper for topological sort
-     */
-    private void topologicalSortDFS(String course, Set<String> visited, 
-                                   Set<String> tempMark, List<String> result)
-    {
-        if (tempMark.contains(course))
-        {
-            return; // Cycle detected (shouldn't happen if DAG is valid)
-        }
-        
-        if (visited.contains(course))
-        {
-            return;
-        }
-        
-        tempMark.add(course);
-        
-        Set<String> prereqs = graph.get(course);
-        if (prereqs != null)
-        {
-            for (String prereq : prereqs)
-            {
-                topologicalSortDFS(prereq, visited, tempMark, result);
-            }
-        }
-        
-        tempMark.remove(course);
-        visited.add(course);
-        result.add(course);
     }
 }
 
