@@ -1022,7 +1022,303 @@ public class MainInterface
             System.out.println("\nProcessing lottery for " + selectedCourseCodes.size() + " course(s): " + 
                               String.join(", ", selectedCourseCodes));
             System.out.println("Total requests: " + filteredRequests.size());
-     }
+            
+            // Convert Student objects to students objects for lottery
+        Map<String, Student> studentMap = registrationSystem.getAllStudents();
+        List<students> studentList = new ArrayList<>();
+        
+        for (Student s : studentMap.values())
+        {
+            students.MajorStatus majorStatus = convertMajorStatus(s.getMajorStatus());
+            List<String> pastClasses = new ArrayList<>(s.getPastClasses());
+            List<String> requestedClasses = new ArrayList<>();
+            
+            // Get requested classes for this student (only from filtered requests)
+            for (ClassRequest req : filteredRequests)
+            {
+                if (req.studentId.equals(s.getStudentId()))
+                {
+                    String courseCode = extractCourseCode(req.courseId);
+                    if (!requestedClasses.contains(courseCode))
+                    {
+                        requestedClasses.add(courseCode);
+                    }
+                }
+            }
+            
+            students lotteryStudent = new students(
+                s.getStudentId(),
+                s.getName(),
+                pastClasses,
+                requestedClasses,
+                s.getGradYear(),
+                majorStatus
+            );
+            studentList.add(lotteryStudent);
+        }
+        
+        // Run lottery with waitlist for selected courses only
+        LotteryEngine engine = new LotteryEngine();
+        LotteryEngine.LotteryResult result = engine.runLotteryWithWaitlist(
+            studentList, filteredCourses, filteredRequests);
+        
+        // Display results
+        String courseCodeDisplay = String.join(", ", selectedCourseCodes);
+        System.out.println("\n=== Lottery Results for " + courseCodeDisplay + " ===");
+        
+        // Group results by status
+        List<WaitlistResult> enrolled = new ArrayList<>();
+        List<WaitlistResult> waitlisted = new ArrayList<>();
+        List<WaitlistResult> rejected = new ArrayList<>();
+        
+        for (ClassRequest req : filteredRequests)
+        {
+            WaitlistResult waitlistResult = result.getResult(req.studentId, req.courseId);
+            if (waitlistResult != null)
+            {
+                switch (waitlistResult.status)
+                {
+                    case ENROLLED:
+                        enrolled.add(waitlistResult);
+                        break;
+                    case WAITLISTED:
+                        waitlisted.add(waitlistResult);
+                        break;
+                    case REJECTED:
+                        rejected.add(waitlistResult);
+                        break;
+                }
+            }
+        }
+        
+        // Display enrolled students
+        if (!enrolled.isEmpty())
+        {
+            System.out.println("\n--- ENROLLED (" + enrolled.size() + ") ---");
+            for (WaitlistResult wr : enrolled)
+            {
+                Student student = registrationSystem.getStudent(wr.studentId);
+                if (student != null)
+                {
+                    String courseCode = removeLocationCode(extractCourseCode(wr.courseId));
+                    System.out.println("  - " + student.getName() + " (" + wr.studentId + ") - " + 
+                                     courseCode + " - Weight: " + wr.studentWeight);
+                }
+            }
+        }
+        
+        // Display waitlisted students
+        if (!waitlisted.isEmpty())
+        {
+            System.out.println("\n--- WAITLISTED (" + waitlisted.size() + ") ---");
+            for (WaitlistResult wr : waitlisted)
+            {
+                Student student = registrationSystem.getStudent(wr.studentId);
+                if (student != null)
+                {
+                    System.out.println("  - " + student.getName() + " (" + wr.studentId + ")");
+                }
+            }
+        }
+        
+        // Display rejected students
+        if (!rejected.isEmpty())
+        {
+            System.out.println("\n--- REJECTED (" + rejected.size() + ") ---");
+            for (WaitlistResult wr : rejected)
+            {
+                Student student = registrationSystem.getStudent(wr.studentId);
+                if (student != null)
+                {
+                    System.out.println("  - " + student.getName() + " (" + wr.studentId + ")");
+                }
+            }
+        }
+        
+        // Summary
+        System.out.println("\n=== Summary ===");
+        System.out.println("Enrolled: " + enrolled.size());
+        System.out.println("Waitlisted: " + waitlisted.size());
+        System.out.println("Rejected: " + rejected.size());
+        System.out.println("Total Requests: " + filteredRequests.size());
+        
+        // Save results to file
+        String resultsFile = saveLotteryResults(selectedCourseCodes, result, filteredRequests);
+        if (resultsFile != null)
+        {
+            System.out.println("\nResults saved to: " + resultsFile);
+        }
+        
+        // Interactive menu to check student results
+        while (true)
+        {
+            System.out.println("\n--- Options ---");
+            System.out.println("1. Check Student Result");
+            System.out.println("2. Continue");
+            System.out.print("Enter your choice (1-2): ");
+            
+            String choice = scanner.nextLine().trim();
+            
+            switch (choice)
+            {
+                case "1":
+                    checkStudentResult(result, filteredRequests, courseCodeDisplay);
+                    break;
+                case "2":
+                    return;
+                default:
+                    System.out.println("Invalid choice. Please enter 1 or 2.");
+            }
+        }
+    }
+
+    /**
+     * Check result for a specific student
+     */
+    private void checkStudentResult(LotteryEngine.LotteryResult result, 
+                                   List<ClassRequest> requests, String courseCodeDisplay)
+    {
+        System.out.print("\nEnter student name or ID: ");
+        String input = scanner.nextLine().trim();
+        
+        if (input.isEmpty())
+        {
+            System.out.println("Input cannot be empty.");
+            return;
+        }
+        
+        // Find student by name or ID
+        Student student = null;
+        Map<String, Student> allStudents = registrationSystem.getAllStudents();
+        
+        // Try to find by ID first
+        student = allStudents.get(input);
+        
+        // If not found by ID, try by name
+        if (student == null)
+        {
+            student = findStudentByName(input);
+        }
+        
+        if (student == null)
+        {
+            System.out.println("Student not found.");
+            return;
+        }
+        
+        // Display student profile
+        System.out.println("\n--- Student Profile ---");
+        System.out.println("Name: " + student.getName());
+        System.out.println("Student ID: " + student.getStudentId());
+        System.out.println("Graduation Year: " + student.getGradYear());
+        System.out.println("Major Status: " + student.getMajorStatus());
+        
+        // Find all results for this student
+        List<WaitlistResult> studentResults = new ArrayList<>();
+        for (ClassRequest req : requests)
+        {
+            if (req.studentId.equals(student.getStudentId()))
+            {
+                WaitlistResult waitlistResult = result.getResult(req.studentId, req.courseId);
+                if (waitlistResult != null)
+                {
+                    studentResults.add(waitlistResult);
+                }
+            }
+        }
+        
+        if (studentResults.isEmpty())
+        {
+            System.out.println("\nNo lottery results found for this student for the selected course(s).");
+            return;
+        }
+        
+        // Display results
+        System.out.println("\n--- Lottery Results ---");
+        for (WaitlistResult wr : studentResults)
+        {
+            String courseCode = removeLocationCode(extractCourseCode(wr.courseId));
+            System.out.println("\nCourse: " + courseCode + " (" + wr.courseId + ")");
+            System.out.println("Status: " + wr.status);
+            
+            if (wr.status == WaitlistResult.Status.ENROLLED)
+            {
+                System.out.println("Weight: " + wr.studentWeight);
+                System.out.println("Result: Successfully enrolled!");
+            }
+            else if (wr.status == WaitlistResult.Status.WAITLISTED)
+            {
+                System.out.println("Weight: " + wr.studentWeight);
+                System.out.println("Reason: " + wr.reason);
+                if (wr.enrolledDemographics != null)
+                {
+                    System.out.println("\nEnrolled Class Demographics:");
+                    System.out.println(wr.enrolledDemographics.toString());
+                }
+            }
+            else if (wr.status == WaitlistResult.Status.REJECTED)
+            {
+                System.out.println("Reason: " + wr.reason);
+            }
+        }
+        
+        System.out.println("\nPress Enter to continue...");
+        scanner.nextLine();
+    }
+    
+    /**
+     * Save lottery results to a CSV file
+     */
+    private String saveLotteryResults(Set<String> courseCodes, LotteryEngine.LotteryResult result, 
+                                     List<ClassRequest> requests)
+    {
+        try
+        {
+            // Create filename with 
+            String courseCodesStr = String.join("_", courseCodes).replaceAll("[^A-Za-z0-9_]", "");
+            String filename = "data/lottery_results_" + courseCodesStr + ".csv";
+            
+            FileWriter writer = new FileWriter(filename);
+            
+            // Write header
+            writer.append("student_id,student_name,course_id,course_code,status,weight,reason\n");
+            
+            // Write all results
+            for (ClassRequest req : requests)
+            {
+                WaitlistResult waitlistResult = result.getResult(req.studentId, req.courseId);
+                if (waitlistResult != null)
+                {
+                    Student student = registrationSystem.getStudent(req.studentId);
+                    String studentName = (student != null) ? student.getName() : "Unknown";
+                    String courseCode = removeLocationCode(extractCourseCode(req.courseId));
+                    
+                    // Escape commas in reason field
+                    String reason = waitlistResult.reason.replace(",", ";").replace("\n", " ");
+                    
+                    writer.append(String.format("%s,%s,%s,%s,%s,%d,%s\n",
+                        req.studentId,
+                        studentName,
+                        req.courseId,
+                        courseCode,
+                        waitlistResult.status.toString(),
+                        waitlistResult.studentWeight,
+                        reason));
+                }
+            }
+            
+            writer.flush();
+            writer.close();
+            
+            return filename;
+        }
+        catch (IOException e)
+        {
+            System.err.println("Error saving lottery results: " + e.getMessage());
+            return null;
+        }
+    }
+    
 
     // Prerequsite feature view
     /**
@@ -1094,7 +1390,28 @@ public class MainInterface
         System.out.println("\nPress Enter to continue...");
         scanner.nextLine();
     }
-    
+
+    /**
+     * Convert major status string to enum
+     */
+    private students.MajorStatus convertMajorStatus(String majorStatus)
+    {
+        if (majorStatus == null) return students.MajorStatus.NON_MAJOR;
+        
+        String status = majorStatus.toLowerCase();
+        if (status.contains("major") && !status.contains("minor"))
+        {
+            return students.MajorStatus.CS_MAJOR;
+        }
+        else if (status.contains("minor"))
+        {
+            return students.MajorStatus.CS_MINOR;
+        }
+        else
+        {
+            return students.MajorStatus.NON_MAJOR;
+        }
+    }
     /**
      * Close Scanner
      */
