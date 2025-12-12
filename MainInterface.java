@@ -90,10 +90,10 @@ public class MainInterface
                     studentRegistration();
                     break;
                 case "2":
-                    // runLottery();
+                    runLottery();
                     break;
                 case "3":
-                    // viewCoursesAndPrerequisites();
+                    viewCoursesAndPrerequisites();
                     break;
                 case "4":
                     System.out.println("Thank you for using the Course Registration System!");
@@ -848,6 +848,89 @@ public class MainInterface
         
         // Reconstruct the line
         return studentId + "," + name + "," + pastClasses + "," + requestedClassesStr + "," + remaining;
+    }
+
+     /**
+     * Run Lottery - Process requests for specific courses
+     */
+     private void runLottery()
+     {
+        System.out.println("\n=== Lottery ===");
+
+     }
+    
+
+
+    // Prerequsite feature view
+    
+    /**
+     * View Courses and Prerequisites - Display all courses with their prerequisites
+     */
+    private void viewCoursesAndPrerequisites()
+    {
+        System.out.println("\n=== Courses and Prerequisites ===");
+        System.out.println("Displaying course prerequisite relationships (DAG):\n");
+        
+        try
+        {
+            // Get the prerequisite graph
+            PrerequisiteGraph graph = PrerequisiteChecker.getPrerequisiteGraph();
+            
+            // Collect all course codes from loaded courses
+            Set<String> courseCodes = new TreeSet<>();
+            for (classes c : allCourses)
+            {
+                String courseCode = removeLocationCode(extractCourseCode(c.courseSectionId));
+                courseCodes.add(courseCode);
+            }
+            
+            // Add courses from the prerequisite graph by checking common course codes
+            String[] commonCourses = {
+                "CS35", "CS51", "CS54", "CS62", "CS101", "CS105", "CS140", 
+                "CS122", "CS124", "CS131", "CS132", "CS133", "CS138", 
+                "CS143", "CS145", "CS151", "CS152", "CS153", "CS158", 
+                "CS159", "CS181AA", "CS181CA", "CS181DA", "CS181AV", "CS181DV"
+            };
+            
+            for (String courseCode : commonCourses)
+            {
+                Set<String> prereqs = graph.getDirectPrerequisites(courseCode);
+                if (!prereqs.isEmpty())
+                {
+                    courseCodes.add(courseCode);
+                }
+                // Add courses that are prerequisites
+                courseCodes.add(courseCode);
+            }
+            
+            // Display courses with prerequisites
+            System.out.println("Courses with prerequisites:");
+            boolean hasAnyPrereqs = false;
+            for (String courseCode : courseCodes)
+            {
+                Set<String> prereqs = graph.getDirectPrerequisites(courseCode);
+                if (!prereqs.isEmpty())
+                {
+                    hasAnyPrereqs = true;
+                    List<String> prereqList = new ArrayList<>(prereqs);
+                    Collections.sort(prereqList);
+                    System.out.println("  " + courseCode + " -> " + String.join(", ", prereqList));
+                }
+            }
+            
+            if (!hasAnyPrereqs)
+            {
+                System.out.println("  (none)");
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println("Error displaying prerequisites: " + e.getMessage());
+            e.printStackTrace();
+        }
+        
+        System.out.println("\nPress Enter to continue...");
+        scanner.nextLine();
     }
     
     /**
