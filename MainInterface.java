@@ -857,12 +857,174 @@ public class MainInterface
      {
         System.out.println("\n=== Lottery ===");
 
+        if (allRequests.isEmpty())
+            {
+                System.out.println("No course requests found. Please add requests first.");
+                System.out.println("Press Enter to continue...");
+                scanner.nextLine();
+                return;
+            }
+            
+            // Get unique courses that have requests
+            Map<String, String> courseCodeToSectionId = new LinkedHashMap<>(); // Preserves order
+            Set<String> seenCourseCodes = new HashSet<>();
+            
+            for (ClassRequest req : allRequests)
+            {
+                String courseCode = removeLocationCode(extractCourseCode(req.courseId));
+                if (!seenCourseCodes.contains(courseCode))
+                {
+                    seenCourseCodes.add(courseCode);
+                    courseCodeToSectionId.put(courseCode, req.courseId);
+                }
+            }
+            
+            if (courseCodeToSectionId.isEmpty())
+            {
+                System.out.println("No courses found with requests.");
+                System.out.println("Press Enter to continue...");
+                scanner.nextLine();
+                return;
+            }
+            
+            // Display available courses
+            System.out.println("\nAvailable Courses with Requests:");
+            List<String> courseCodesList = new ArrayList<>(courseCodeToSectionId.keySet());
+            for (int i = 0; i < courseCodesList.size(); i++)
+            {
+                String courseCode = courseCodesList.get(i);
+                // Count requests for this course
+                long requestCount = allRequests.stream()
+                    .filter(req -> removeLocationCode(extractCourseCode(req.courseId)).equals(courseCode))
+                    .count();
+                System.out.println((i + 1) + ". " + courseCode + " (" + requestCount + " requests)");
+            }
+            System.out.println((courseCodesList.size() + 1) + ". All Courses");
+            
+            System.out.print("\nSelect course(s) to run lottery for (enter course code like CS105, or number like 2, or 'all' for all courses): ");
+            String selection = scanner.nextLine().trim();
+            
+            Set<String> selectedCourseCodes = new HashSet<>();
+            Set<String> selectedCourseSectionIds = new HashSet<>();
+            
+            // Check if "all" or the number for "All Courses" was selected
+            if (selection.equalsIgnoreCase("all") || selection.equals(String.valueOf(courseCodesList.size() + 1)))
+            {
+                // All courses selected
+                selectedCourseCodes.addAll(courseCodesList);
+                for (String courseCode : courseCodesList)
+                {
+                    // Get all section IDs for this course code
+                    for (ClassRequest req : allRequests)
+                    {
+                        String code = removeLocationCode(extractCourseCode(req.courseId));
+                        if (code.equals(courseCode))
+                        {
+                            selectedCourseSectionIds.add(req.courseId);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // Parse selection - can be numbers or course codes
+                String[] selections = selection.split(",");
+                for (String sel : selections)
+                {
+                    sel = sel.trim();
+                    
+                    // Try to parse as number first
+                    try
+                    {
+                        int index = Integer.parseInt(sel) - 1;
+                        if (index >= 0 && index < courseCodesList.size())
+                        {
+                            String courseCode = courseCodesList.get(index);
+                            selectedCourseCodes.add(courseCode);
+                            // Get all section IDs for this course code
+                            for (ClassRequest req : allRequests)
+                            {
+                                String code = removeLocationCode(extractCourseCode(req.courseId));
+                                if (code.equals(courseCode))
+                                {
+                                    selectedCourseSectionIds.add(req.courseId);
+                                }
+                            }
+                        }
+                        continue;
+                    }
+                    catch (NumberFormatException e)
+                    {
+                        // Not a number, try as course code
+                    }
+                    
+                    // Try as course code
+                    String normalizedCode = normalizeCourseCodeInput(sel);
+                    
+                    // Check if this course code exists in the list
+                    boolean found = false;
+                    for (String courseCode : courseCodesList)
+                    {
+                        if (courseCode.equalsIgnoreCase(normalizedCode) || 
+                            courseCode.equalsIgnoreCase(sel) ||
+                            normalizedCode.equalsIgnoreCase(courseCode))
+                        {
+                            selectedCourseCodes.add(courseCode);
+                            found = true;
+                            // Get all section IDs for this course code
+                            for (ClassRequest req : allRequests)
+                            {
+                                String code = removeLocationCode(extractCourseCode(req.courseId));
+                                if (code.equals(courseCode))
+                                {
+                                    selectedCourseSectionIds.add(req.courseId);
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    
+                    if (!found)
+                    {
+                        System.out.println("Course not found: " + sel + " (available courses are listed above)");
+                    }
+                }
+            }
+            
+            if (selectedCourseCodes.isEmpty())
+            {
+                System.out.println("No valid courses selected.");
+                System.out.println("Press Enter to continue...");
+                scanner.nextLine();
+                return;
+            }
+            
+            // Filter requests to only include selected courses
+            List<ClassRequest> filteredRequests = new ArrayList<>();
+            for (ClassRequest req : allRequests)
+            {
+                if (selectedCourseSectionIds.contains(req.courseId))
+                {
+                    filteredRequests.add(req);
+                }
+            }
+            
+            // Filter courses to only include selected ones
+            List<classes> filteredCourses = new ArrayList<>();
+            for (classes c : allCourses)
+            {
+                if (selectedCourseSectionIds.contains(c.courseSectionId))
+                {
+                    filteredCourses.add(c);
+                }
+            }
+            
+            System.out.println("\nProcessing lottery for " + selectedCourseCodes.size() + " course(s): " + 
+                              String.join(", ", selectedCourseCodes));
+            System.out.println("Total requests: " + filteredRequests.size());
      }
-    
-
 
     // Prerequsite feature view
-    
     /**
      * View Courses and Prerequisites - Display all courses with their prerequisites
      */
