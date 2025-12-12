@@ -201,9 +201,9 @@ public class RegistrationInterface
     }
     
     /**
-     * Register a new student interactively
+     * Register a new student interactively (public method to be called from MainInterface)
      */
-    private void registerNewStudent()
+    public void registerNewStudent()
     {
         System.out.println("\n=== Register New Student ===");
         System.out.println();
