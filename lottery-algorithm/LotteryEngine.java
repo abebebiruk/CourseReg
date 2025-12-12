@@ -107,4 +107,78 @@ public class LotteryEngine {
 
         return enrolled;
     }
+
+    /**
+     * Runs the lottery with waitlist analysis for all courses.
+     * Returns comprehensive results including enrolled students and waitlist/rejection reasons.
+     *
+     * @param studentList  list of all students
+     * @param courseList   list of all classes (courses)
+     * @param requestList  list of all class requests
+     * @return LotteryResult containing enrolled students and waitlist results
+     */
+    public LotteryResult runLotteryWithWaitlist(List<students> studentList,
+                                                List<classes> courseList,
+                                                List<ClassRequest> requestList) {
+        int currentYear = java.time.Year.now().getValue();
+        
+        // First, calculate weights for all requests (before running lottery)
+        Map<String, Integer> requestWeights = new HashMap<>();
+        Map<String, classes> coursesById = new HashMap<>();
+        Map<String, students> studentsById = new HashMap<>();
+        
+        for (classes c : courseList) {
+            coursesById.put(c.courseSectionId, c);
+        }
+        for (students s : studentList) {
+            studentsById.put(s.studentId, s);
+        }
+        
+        // Calculate weights for all requests
+        for (ClassRequest req : requestList) {
+            String key = req.studentId + ":" + req.courseId;
+            students student = studentsById.get(req.studentId);
+            classes course = coursesById.get(req.courseId);
+            
+            if (student != null && course != null) {
+                int weight = LotteryWeightCalculator.computeWeight(student, req, course, currentYear);
+                requestWeights.put(key, weight);
+            }
+        }
+        
+        // Run the lottery
+        Map<String, List<students>> enrolledByCourse = runLottery(studentList, courseList, requestList);
+        
+        // Analyze waitlist results
+        WaitlistAnalyzer analyzer = new WaitlistAnalyzer();
+        Map<String, WaitlistResult> waitlistResults = analyzer.analyzeWaitlist(
+                enrolledByCourse, requestList, studentList, courseList, requestWeights, currentYear);
+        
+        return new LotteryResult(enrolledByCourse, waitlistResults);
+    }
+
+    /**
+     * Result container for lottery with waitlist analysis.
+     */
+    public static class LotteryResult {
+        public final Map<String, List<students>> enrolledByCourse;
+        private final Map<String, WaitlistResult> waitlistResults;
+
+        public LotteryResult(Map<String, List<students>> enrolledByCourse,
+                           Map<String, WaitlistResult> waitlistResults) {
+            this.enrolledByCourse = enrolledByCourse;
+            this.waitlistResults = waitlistResults;
+        }
+
+        /**
+         * Gets the waitlist result for a specific student and course.
+         * @param studentId The student ID
+         * @param courseId The course ID
+         * @return WaitlistResult or null if not found
+         */
+        public WaitlistResult getResult(String studentId, String courseId) {
+            String key = studentId + ":" + courseId;
+            return waitlistResults.get(key);
+        }
+    }
 }
