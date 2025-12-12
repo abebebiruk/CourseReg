@@ -124,6 +124,15 @@ public class RegistrationSystem
     }
     
     /**
+     * Get all students in the system
+     * @return HashMap of all students (studentId -> Student)
+     */
+    public HashMap<String, Student> getAllStudents()
+    {
+        return new HashMap<>(students);
+    }
+    
+    /**
      * Load student data from file - Builds HashMap during load
      * CSV format: student_id,name,past_classes,requested_classes,grad_year,major_status
      * past_classes format: [CS140,CS51,CS62] (bracketed list)

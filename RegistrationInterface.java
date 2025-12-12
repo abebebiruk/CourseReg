@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 /**
- * Main interactive interface for student course registration system
+ * RegistrationInterface - Main interactive interface for student course registration system
  * Handles student registration with validation and course selection
  */
 public class RegistrationInterface
@@ -328,7 +328,8 @@ public class RegistrationInterface
         
         // Follows same logic as past classes
         // Get requested classes
-        System.out.println("\nEnter CS classes you want to take.");
+        System.out.println("\nEnter CS classes you want to take based on preference.");
+        System.out.println("Enter classes in order of preference (highest preference first, then second, third, etc.).");
         System.out.println("Enter just the number/identifier (e.g., 101, 51, 181DV, 140) - 'CS' prefix will be added automatically.");
         System.out.println("Enter one course per line, or press Enter with empty line to finish:");
         List<String> requestedClasses = new ArrayList<>();

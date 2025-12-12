@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class Main {
+public class TestLottery {
     public static void main(String[] args) {
         // ----- create some sample students -----
         students s1 = new students(
