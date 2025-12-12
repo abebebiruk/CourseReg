@@ -503,7 +503,351 @@ public class MainInterface
      */
     private void addCourseRequests(Student student)
     {
-        System.out.println("\n=== Add Course Requests ===");
+        System.out.println("=== Add Course Requests ===");
+        
+        // Get existing requests from CSV
+        List<String> existingCourseCodesFromCsv = getRequestedClassesFromCsv(student.getStudentId());
+        
+        // Display existing requests
+        if (!existingCourseCodesFromCsv.isEmpty())
+        {
+            System.out.println("\nYour Current Requests:");
+            for (int i = 0; i < existingCourseCodesFromCsv.size(); i++)
+            {
+                String code = removeLocationCode(existingCourseCodesFromCsv.get(i));
+                System.out.println("  " + (i + 1) + ". " + code);
+            }
+            int remainingSlots = 4 - existingCourseCodesFromCsv.size();
+            System.out.println("\nYou can add up to " + remainingSlots + " more course request(s).");
+        }
+        else
+        {
+            System.out.println("\nYou currently have no course requests.");
+            System.out.println("You can request up to 4 courses, ranked by preference (1 = highest preference).");
+        }
+        
+        System.out.println("\nEnter course codes (e.g., 140, 181DV, 51) - 'CS' prefix will be added automatically.");
+        System.out.println("Press Enter with empty line to finish.\n");
+        
+        // Remove existing requests for this student from allRequests (we'll rebuild them)
+        allRequests.removeIf(req -> req.studentId.equals(student.getStudentId()));
+        
+        // Start with existing requests
+        List<String> requestedCourseCodes = new ArrayList<>(existingCourseCodesFromCsv);
+        int rank = existingCourseCodesFromCsv.size() + 1;
+        
+        // Find course sections for existing requests and add them to allRequests
+        for (int i = 0; i < existingCourseCodesFromCsv.size(); i++)
+        {
+            String courseCode = existingCourseCodesFromCsv.get(i);
+            String normalizedCode = normalizeCourseCodeInput(courseCode);
+            
+            // Find matching course sections
+            List<classes> matchingCourses = findCoursesByCode(normalizedCode);
+            if (!matchingCourses.isEmpty())
+            {
+                // Use the first available section
+                classes selectedCourse = matchingCourses.get(0);
+                ClassRequest request = new ClassRequest(student.getStudentId(), 
+                                                       selectedCourse.courseSectionId, i + 1);
+                allRequests.add(request);
+            }
+        }
+        
+        // Allow user to add more requests (up to 4 total)
+        while (rank <= 4)
+        {
+            System.out.print("Course " + rank + " (or Enter to finish): ");
+            String input = scanner.nextLine().trim();
+            
+            if (input.isEmpty())
+            {
+                break;
+            }
+            
+            // Normalize course code
+            String normalizedCode = normalizeCourseCodeInput(input);
+            
+            if (!isValidCourseCode(normalizedCode))
+            {
+                System.out.println("Invalid course code. Please try again.");
+                continue;
+            }
+            
+            // Check if already requested
+            if (requestedCourseCodes.contains(normalizedCode))
+            {
+                System.out.println("You have already requested this course. Please choose a different one.");
+                continue;
+            }
+            
+            // Find matching course sections
+            List<classes> matchingCourses = findCoursesByCode(normalizedCode);
+            
+            if (matchingCourses.isEmpty())
+            {
+                System.out.println("No courses found matching: " + normalizedCode);
+                System.out.println("Please check the course code and try again.");
+                continue;
+            }
+            
+            // If multiple sections, let user choose
+            classes selectedCourse = null;
+            if (matchingCourses.size() == 1)
+            {
+                selectedCourse = matchingCourses.get(0);
+            }
+            else
+            {
+                System.out.println("\nMultiple sections found for " + normalizedCode + ":");
+                for (int i = 0; i < matchingCourses.size(); i++)
+                {
+                    classes c = matchingCourses.get(i);
+                    int availableSeats = c.capacity - c.currentEnrollment;
+                    System.out.println((i + 1) + ". " + c.courseSectionId + 
+                                     " - Available seats: " + availableSeats + 
+                                     " / Capacity: " + c.capacity);
+                }
+                System.out.print("Select section (1-" + matchingCourses.size() + "): ");
+                String sectionChoice = scanner.nextLine().trim();
+                try
+                {
+                    int idx = Integer.parseInt(sectionChoice) - 1;
+                    if (idx >= 0 && idx < matchingCourses.size())
+                    {
+                        selectedCourse = matchingCourses.get(idx);
+                    }
+                    else
+                    {
+                        System.out.println("Invalid selection.");
+                        continue;
+                    }
+                }
+                catch (NumberFormatException e)
+                {
+                    System.out.println("Invalid selection.");
+                    continue;
+                }
+            }
+            
+            // Check available seats first
+            int availableSeats = selectedCourse.capacity - selectedCourse.currentEnrollment;
+            System.out.println("Available seats: " + availableSeats + " / Capacity: " + selectedCourse.capacity);
+            
+            if (availableSeats <= 0)
+            {
+                System.out.println("Cannot register: Course is full.");
+                continue;
+            }
+            
+            // Validate prerequisites
+            Course courseForValidation = registrationSystem.getCourse(selectedCourse.courseSectionId);
+            if (courseForValidation == null)
+            {
+                // Create course object for validation if it doesn't exist
+                String courseCode = extractCourseCode(selectedCourse.courseSectionId);
+                courseForValidation = new Course(selectedCourse.courseSectionId, courseCode, selectedCourse.capacity);
+                registrationSystem.addCourse(courseForValidation);
+            }
+            
+            PrerequisiteValidationResult validation = registrationSystem.validateRegistration(
+                student.getStudentId(), selectedCourse.courseSectionId);
+            
+            if (!validation.isEligible())
+            {
+                System.out.println("Cannot register: " + validation.getMessage());
+                if (!validation.getMissingPrerequisites().isEmpty())
+                {
+                    System.out.println("Missing prerequisites: " + 
+                        String.join(", ", validation.getMissingPrerequisites()));
+                }
+                continue;
+            }
+            
+            // Create request
+            ClassRequest request = new ClassRequest(student.getStudentId(), 
+                                                   selectedCourse.courseSectionId, rank);
+            allRequests.add(request);
+            requestedCourseCodes.add(normalizedCode);
+            
+            System.out.println("Added: " + selectedCourse.courseSectionId + " (Preference rank: " + rank + ")");
+            rank++;
+        }
+        
+        // Update CSV with merged list
+        updateRequestedClassesInCsv(student.getStudentId(), requestedCourseCodes);
+        
+        if (rank > existingCourseCodesFromCsv.size() + 1)
+        {
+            int newRequests = rank - existingCourseCodesFromCsv.size() - 1;
+            System.out.println("\nSuccessfully added " + newRequests + " new course request(s).");
+            System.out.println("Total requests: " + requestedCourseCodes.size());
+        }
+        else if (existingCourseCodesFromCsv.isEmpty())
+        {
+            System.out.println("\nNo course requests added.");
+        }
+        else
+        {
+            System.out.println("\nYour existing requests have been preserved.");
+        }
+        
+        System.out.println("Press Enter to continue...");
+        scanner.nextLine();
+    }
+
+    // Extract/update requested classes in CSV
+    
+    /**
+     * Get requested classes from CSV for a specific student
+     */
+    private List<String> getRequestedClassesFromCsv(String studentId)
+    {
+        List<String> requestedClasses = new ArrayList<>();
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(studentCsvPath)))
+        {
+            String line = br.readLine(); // Skip header
+            
+            while ((line = br.readLine()) != null)
+            {
+                if (line.trim().isEmpty()) continue;
+                
+                int firstComma = line.indexOf(',');
+                if (firstComma == -1) continue;
+                
+                String csvStudentId = line.substring(0, firstComma).trim();
+                if (!csvStudentId.equals(studentId)) continue;
+                
+                int firstCloseBracket = line.indexOf(']');
+                int secondBracket = line.indexOf('[', firstCloseBracket + 1);
+                int secondCloseBracket = (secondBracket != -1) ? line.indexOf(']', secondBracket + 1) : -1;
+                
+                if (secondBracket != -1 && secondCloseBracket != -1)
+                {
+                    String requestedClassesStr = line.substring(secondBracket, secondCloseBracket + 1).trim();
+                    
+                    if (!requestedClassesStr.equals("") && !requestedClassesStr.equals("[]"))
+                    {
+                        String cleaned = requestedClassesStr.replace("[", "").replace("]", "");
+                        String[] courseCodes = cleaned.split(",");
+                        
+                        for (String courseCode : courseCodes)
+                        {
+                            courseCode = courseCode.trim();
+                            if (!courseCode.isEmpty())
+                            {
+                                requestedClasses.add(courseCode);
+                            }
+                        }
+                    }
+                }
+                break; // Found the student, no need to continue
+            }
+        }
+        catch (IOException e)
+        {
+            // Silently fail
+        }
+        
+        return requestedClasses;
+    }
+    
+    /**
+     * Update requested classes in CSV for a student
+     */
+    private void updateRequestedClassesInCsv(String studentId, List<String> requestedCourseCodes)
+    {
+        try
+        {
+            // Read all lines
+            List<String> lines = new ArrayList<>();
+            try (BufferedReader br = new BufferedReader(new FileReader(studentCsvPath)))
+            {
+                String line;
+                while ((line = br.readLine()) != null)
+                {
+                    lines.add(line);
+                }
+            }
+            
+            // Update the student's line
+            for (int i = 0; i < lines.size(); i++)
+            {
+                String line = lines.get(i);
+                if (i == 0) continue; // Skip header
+                
+                int firstComma = line.indexOf(',');
+                if (firstComma == -1) continue;
+                
+                String csvStudentId = line.substring(0, firstComma).trim();
+                if (!csvStudentId.equals(studentId)) continue;
+                
+                // Found the student - update the line
+                String updatedLine = updateStudentRequestedClasses(line, requestedCourseCodes);
+                lines.set(i, updatedLine);
+                break;
+            }
+            
+            // Write all lines back
+            try (FileWriter writer = new FileWriter(studentCsvPath))
+            {
+                for (String line : lines)
+                {
+                    writer.write(line + "\n");
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            System.err.println("Error updating requested classes in CSV: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Update the requested_classes field in a CSV line
+     */
+    private String updateStudentRequestedClasses(String csvLine, List<String> requestedCourseCodes)
+    {
+        // Parse the line manually to handle brackets correctly
+        int firstComma = csvLine.indexOf(',');
+        if (firstComma == -1) return csvLine;
+        
+        String studentId = csvLine.substring(0, firstComma);
+        String remaining = csvLine.substring(firstComma + 1);
+        
+        // Find name (ends at next comma)
+        int nameEnd = remaining.indexOf(',');
+        if (nameEnd == -1) return csvLine;
+        String name = remaining.substring(0, nameEnd);
+        remaining = remaining.substring(nameEnd + 1);
+        
+        // Find past_classes (bracketed)
+        int pastClassesStart = remaining.indexOf('[');
+        int pastClassesEnd = remaining.indexOf(']');
+        if (pastClassesStart == -1 || pastClassesEnd == -1) return csvLine;
+        String pastClasses = remaining.substring(pastClassesStart, pastClassesEnd + 1);
+        remaining = remaining.substring(pastClassesEnd + 2); // Skip ] and comma
+        
+        // Find requested_classes (bracketed) - but we'll replace it
+        int requestedClassesStart = remaining.indexOf('[');
+        int requestedClassesEnd = remaining.indexOf(']');
+        if (requestedClassesStart == -1 || requestedClassesEnd == -1) return csvLine;
+        remaining = remaining.substring(requestedClassesEnd + 2); // Skip ] and comma
+        
+        // Format requested classes
+        String requestedClassesStr;
+        if (requestedCourseCodes.isEmpty())
+        {
+            requestedClassesStr = "[]";
+        }
+        else
+        {
+            requestedClassesStr = "[" + String.join(",", requestedCourseCodes) + "]";
+        }
+        
+        // Reconstruct the line
+        return studentId + "," + name + "," + pastClasses + "," + requestedClassesStr + "," + remaining;
     }
     
     /**
