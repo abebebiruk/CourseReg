@@ -14,8 +14,6 @@ public class RegistrationSystem
     private HashMap<String, Course> courses;
     // O(1) lookup to find all sections of a course (e.g., all "CSCI004" sections)
     private HashMap<String, Set<String>> coursesByCode;
-    // Lottery pool (temporarily used during course assignment)
-    private LinkedList<Student> lottery;
     
     /**
      * Constructor
@@ -26,7 +24,6 @@ public class RegistrationSystem
         this.students = new HashMap<>();
         this.courses = new HashMap<>();
         this.coursesByCode = new HashMap<>();
-        this.lottery = new LinkedList<>();
     }
     
     /**
