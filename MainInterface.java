@@ -1023,7 +1023,7 @@ public class MainInterface
                               String.join(", ", selectedCourseCodes));
             System.out.println("Total requests: " + filteredRequests.size());
             
-            // Convert Student objects to students objects for lottery
+        // Convert Student objects to students objects for lottery
         Map<String, Student> studentMap = registrationSystem.getAllStudents();
         List<students> studentList = new ArrayList<>();
         
